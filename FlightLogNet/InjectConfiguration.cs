@@ -26,7 +26,6 @@
             services.AddScoped<FlightFacade, FlightFacade>();
 
             services.AddScoped<IClubUserDatabase, ClubUserDatabaseStub>();
-            // services.AddScoped<IClubUserDatabase, ClubUserDatabase>();
         }
     }
 }

@@ -6,6 +6,10 @@
 
     public interface IFlightRepository
     {
+        IList<FlightModel> GetFlightsOfType(FlightType type);
+
+        IList<FlightModel> GetAirplanesInAir();
+
         IList<ReportModel> GetReport();
 
         void LandFlight(FlightLandingModel landingModel);

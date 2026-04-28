@@ -11,7 +11,7 @@
 
     public class ClubUserDatabase(IConfiguration configuration) : IClubUserDatabase
     {
-        // TODO 8.1: Přidejte si / použijte přes dependency injection configuraci
+        private readonly string baseUrl = configuration.GetValue<string>("ClubUsersApi") ?? "http://localhost:8080/";
 
         public bool TryGetClubUser(long memberId, out PersonModel personModel)
         {
@@ -28,14 +28,21 @@
 
         private List<ClubUser> ReceiveClubUsers()
         {
-            // TODO 8.2: Naimplementujte volání endpointu ClubDB pomocí RestSharp
+            var client = new RestClient(this.baseUrl);
+            var request = new RestRequest("club-users", Method.Get);
+            var response = client.Execute<List<ClubUser>>(request);
 
-            return null;
+            return response.Data ?? [];
         }
 
         private List<PersonModel> TransformToPersonModel(IList<ClubUser> users)
         {
-            return null;
+            if (users == null)
+            {
+                return [];
+            }
+
+            return users.Select(user => user.ToPersonModel()).ToList();
         }
     }
 }

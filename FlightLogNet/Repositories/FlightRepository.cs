@@ -13,7 +13,19 @@
 
     public class FlightRepository(IConfiguration configuration) : IFlightRepository
     {
-        // TODO 2.1: Upravte metodu tak, aby vrátila pouze lety specifického typu
+        public IList<FlightModel> GetFlightsOfType(FlightType type)
+        {
+            using var dbContext = new LocalDatabaseContext(configuration);
+
+            var flights = dbContext.Flights
+                .Where(flight => flight.Type == type)
+                .Include(flight => flight.Airplane).ThenInclude(airplane => airplane.ClubAirplane).ThenInclude(ca => ca.AirplaneType)
+                .Include(flight => flight.Pilot).ThenInclude(person => person.Address)
+                .Include(flight => flight.Copilot).ThenInclude(person => person.Address);
+
+            return flights.Select(f => f.ToModel()).ToList();
+        }
+
         public IList<FlightModel> GetAllFlights()
         {
             using var dbContext = new LocalDatabaseContext(configuration);
@@ -26,8 +38,20 @@
             return flights.Select(f => f.ToModel()).ToList();
         }
 
-        // TODO 2.3: Vytvořte metodu, která načte letadla, která jsou ve vzduchu, seřadí je od nejstarších,
-        // a v případě shody dá vlečné pred kluzák, který táhne
+        public IList<FlightModel> GetAirplanesInAir()
+        {
+            using var dbContext = new LocalDatabaseContext(configuration);
+
+            var flightsInAir = dbContext.Flights
+                .Where(flight => flight.LandingTime == null)
+                .Include(flight => flight.Airplane).ThenInclude(airplane => airplane.ClubAirplane).ThenInclude(ca => ca.AirplaneType)
+                .Include(flight => flight.Pilot).ThenInclude(person => person.Address)
+                .Include(flight => flight.Copilot).ThenInclude(person => person.Address)
+                .OrderBy(flight => flight.TakeoffTime)
+                .ThenBy(flight => flight.Type == FlightType.Towplane ? 0 : 1);
+
+            return flightsInAir.Select(f => f.ToModel()).ToList();
+        }
 
         public void LandFlight(FlightLandingModel landingModel)
         {

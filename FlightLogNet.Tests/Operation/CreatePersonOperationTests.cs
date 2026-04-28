@@ -107,7 +107,6 @@
                 MemberId = 444
             };
 
-            // TODO 7.1: Naimplementujte test s použitím mocků
             long id = 0;
             this.mockPersonRepository.Setup(repository => repository.TryGetPerson(personModel, out id)).Returns(false);
             this.mockClubUserDatabase.Setup(repository => repository.TryGetClubUser(444, out clubUser)).Returns(true);
