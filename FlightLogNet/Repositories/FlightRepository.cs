@@ -91,7 +91,8 @@
                 Copilot = copilot,
                 Pilot = dbContext.Persons.Find(model.PilotId),
                 TakeoffTime = model.TakeOffTime,
-                Task = model.Task
+                Task = model.Task,
+                Type = model.Type
             };
 
             dbContext.Flights.Add(flight);

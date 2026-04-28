@@ -18,14 +18,27 @@ export class CurrentFlights {
     this.backendService.getClubAirplanes().then(
       data => {
         this.airplanes = data;
+        this.applyDropdownDefaults();
       }
     );
 
     this.backendService.getClubMembers().then(
       data => {
         this.clubMembers = data;
+        this.applyDropdownDefaults();
       }
     );
+  }
+
+  applyDropdownDefaults() {
+    if (this.airplanes.length) {
+      this.takeoffForm.towplane.airplane.clubAirplane = this.airplanes[0];
+      this.takeoffForm.glider.airplane.clubAirplane = this.airplanes[0];
+    }
+    if (this.clubMembers.length) {
+      this.takeoffForm.towplane.pilot.clubMember = this.clubMembers[0];
+      this.takeoffForm.glider.pilot.clubMember = this.clubMembers[0];
+    }
   }
 
   takeoff() {
@@ -33,6 +46,7 @@ export class CurrentFlights {
       .then(() => {
         alert('Start letu byl zaznamenán');
         this.takeoffForm = new TakeoffForm();
+        this.applyDropdownDefaults();
       })
       .catch(error => {
         console.log(error);

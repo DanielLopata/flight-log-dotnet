@@ -18,7 +18,7 @@ export function configure(aurelia) {
   http.configure(config => {
     config
     .useStandardConfiguration()
-    .withBaseUrl('http://localhost:8081/')
+    .withBaseUrl('http://localhost:44313/')
     .withDefaults({
       headers: {
         'Accept': 'application/json'

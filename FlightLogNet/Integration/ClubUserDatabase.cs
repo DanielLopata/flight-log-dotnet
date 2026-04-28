@@ -11,6 +11,9 @@
 
     public class ClubUserDatabase(IConfiguration configuration) : IClubUserDatabase
     {
+        private static IList<PersonModel> cachedUsers;
+        private static readonly object cacheLock = new();
+
         private readonly string baseUrl = configuration.GetValue<string>("ClubUsersApi") ?? "http://vyuka.profinit.eu:8080/";
 
         public bool TryGetClubUser(long memberId, out PersonModel personModel)
@@ -22,8 +25,21 @@
 
         public IList<PersonModel> GetClubUsers()
         {
-            IList<ClubUser> x = this.ReceiveClubUsers();
-            return this.TransformToPersonModel(x);
+            if (cachedUsers != null)
+            {
+                return cachedUsers;
+            }
+
+            lock (cacheLock)
+            {
+                if (cachedUsers != null)
+                {
+                    return cachedUsers;
+                }
+
+                cachedUsers = this.TransformToPersonModel(this.ReceiveClubUsers());
+                return cachedUsers;
+            }
         }
 
         private List<ClubUser> ReceiveClubUsers()

@@ -31,6 +31,8 @@ namespace FlightLogNet
                         {
                             policy.WithOrigins(origins);
                         }
+                        policy.AllowAnyMethod();
+                        policy.AllowAnyHeader();
                     });
             });
         }
