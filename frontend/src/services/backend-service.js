@@ -46,6 +46,11 @@ export class BackendService {
     return this.httpClient.fetch('flight/land', {
       method: 'post',
       body: json(landCommand)
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`Land failed: ${response.status} ${response.statusText}`);
+      }
+      return response;
     }).catch(error => {
       console.log(error);
       alert('Cannot land flight.');
@@ -65,6 +70,11 @@ export class BackendService {
     return this.httpClient.fetch('flight/takeoff', {
       method: 'post',
       body: json(request)
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`Takeoff failed: ${response.status} ${response.statusText}`);
+      }
+      return response;
     });
   }
 

@@ -1,15 +1,7 @@
-# Frontend in Aurelia
+# Frontend
 
-Commands:
+Frontend run/setup instructions are maintained in the root project README:
 
-Start frontend separately:
-```
-au run
-```
+- [/home/daniellopata/flight-log-dotnet/README.md](/home/daniellopata/flight-log-dotnet/README.md)
 
-Build app into dist:
-```
-au build --env prod
-```
-
-After that copy content of `dist` directory to `app/src/main/resources/static`.
+Use that document for full local setup, troubleshooting, and run commands.

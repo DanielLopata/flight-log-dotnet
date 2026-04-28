@@ -11,7 +11,7 @@
 
     public class ClubUserDatabase(IConfiguration configuration) : IClubUserDatabase
     {
-        private readonly string baseUrl = configuration.GetValue<string>("ClubUsersApi") ?? "http://localhost:8080/";
+        private readonly string baseUrl = configuration.GetValue<string>("ClubUsersApi") ?? "http://vyuka.profinit.eu:8080/";
 
         public bool TryGetClubUser(long memberId, out PersonModel personModel)
         {
@@ -29,7 +29,7 @@
         private List<ClubUser> ReceiveClubUsers()
         {
             var client = new RestClient(this.baseUrl);
-            var request = new RestRequest("club-users", Method.Get);
+            var request = new RestRequest("club/user", Method.Get);
             var response = client.Execute<List<ClubUser>>(request);
 
             return response.Data ?? [];
